@@ -1,17 +1,20 @@
+#include <math.h>
 #include <stdio.h>
 #include "include/raylib.h"
 #include "include/raymath.h"
 
 #define GRAVITY (-9.8f)
-#define BODY_COUNT 2
+#define BODY_COUNT 4
+#define RADIUS 16
 
 typedef struct Body {
 	float mass;
-	Vector2 position;
-	Vector2 velocity;
+	float length;
+	float theta;
 } Body;
 
-void solve(Body *(bodies[]), float dt);
+void solve(Body bodies[], float dt);
+Vector2 getPos(Body body);
 
 int main(void) {
 	const Vector2 screenSize = {1280, 720};
@@ -24,37 +27,41 @@ int main(void) {
 	Vector2 origin = (Vector2){screenSize.x / 2, screenSize.y / 4};
 
 	Body bodies[BODY_COUNT];
-	int lengths[BODY_COUNT];
-	bodies[0] = (Body){
-		1.0f,
-		(Vector2){100, 100},
-		(Vector2){0, 0}
-	};
-	bodies[1] = (Body){
-		1.0f,
-		(Vector2){0, 200},
-		(Vector2){0, 0}
-	};
+	bodies[0] = (Body){ 4.0f, 100, 0 };
+	bodies[1] = (Body){ 10.0f, 150, PI/4 };
+	bodies[2] = (Body){ 5.0f, 50, PI/2 };
+	bodies[3] = (Body){ 2.0f, 100, 3 * PI/4 };
 
-	lengths[0] = Vector2Distance(origin, bodies[0].position);
-	for (int i = 1; i < BODY_COUNT; ++i) {
-		lengths[i] = Vector2Distance(bodies[i].position, bodies[i+1].position);
-	}
-
+	float t = 0;
 	while (!WindowShouldClose()) {
-		bodies[0].position = Vector2Subtract(GetMousePosition(), origin);
+		float dt = GetFrameTime();
+		t += dt;
+
+		float omega = PI / 10;
+		for (int i = 0; i < BODY_COUNT; ++i) {
+			bodies[i].theta += omega * cosf(omega * t) * dt * bodies[i].mass;
+		}
+
 
 		BeginDrawing();
 
 		ClearBackground(BLACK);
 
-		DrawLineV(origin, Vector2Add(bodies[0].position, origin), WHITE);
-		for (int i = 0; i < BODY_COUNT - 1; ++i) {
-			DrawLineV(Vector2Add(origin, bodies[i].position),
-				Vector2Add(origin, bodies[i+1].position), WHITE);
-		}
+		// Draw arms
+		Vector2 prevPos = origin;
 		for (int i = 0; i < BODY_COUNT; ++i) {
-			DrawCircleV(Vector2Add(origin, bodies[i].position), 16, BLUE);
+			Vector2 newPos = Vector2Add(prevPos, getPos(bodies[i]));
+			DrawLineV(prevPos, newPos, WHITE);
+			prevPos = newPos;
+		}
+
+		// Draw bodies
+		prevPos = origin;
+		DrawCircleV(origin, RADIUS / 2.0f, RED);
+		for (int i = 0; i < BODY_COUNT; ++i) {
+			Vector2 newPos = Vector2Add(prevPos, getPos(bodies[i]));
+			DrawCircleV(newPos, RADIUS, BLUE);
+			prevPos = newPos;
 		}
 
 		EndDrawing();
@@ -65,6 +72,13 @@ int main(void) {
 	return 0;
 }
 
-void solve(Body *(bodies[]), float dt) {
+void solve(Body bodies[], float dt) {
 	return;
+}
+
+Vector2 getPos(Body body) {
+	return Vector2Scale((Vector2){
+		sinf(body.theta), 
+		cosf(body.theta)
+	}, body.length);
 }
