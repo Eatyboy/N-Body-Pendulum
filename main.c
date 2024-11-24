@@ -13,6 +13,7 @@ typedef struct Body {
 	float theta;
 } Body;
 
+void render(Body bodies[], Vector2 origin);
 void solve(Body bodies[], float dt);
 Vector2 getPos(Body body);
 
@@ -27,26 +28,28 @@ int main(void) {
 	Vector2 origin = (Vector2){screenSize.x / 2, screenSize.y / 4};
 
 	Body bodies[BODY_COUNT];
-	bodies[0] = (Body){ 4.0f, 100, 0 };
-	bodies[1] = (Body){ 10.0f, 150, PI/4 };
-	bodies[2] = (Body){ 5.0f, 50, PI/2 };
-	bodies[3] = (Body){ 2.0f, 100, 3 * PI/4 };
+	bodies[0] = (Body){ 1.0f, 100, 0 };
+	bodies[1] = (Body){ 2.0f, 150, PI/4 };
+	bodies[2] = (Body){ 3.0f, 50, PI/2 };
+	bodies[3] = (Body){ 4.0f, 100, 3 * PI/4 };
 
-	float t = 0;
 	while (!WindowShouldClose()) {
 		float dt = GetFrameTime();
-		t += dt;
+		solve(bodies, dt);
+		render(bodies, origin);
+	}
 
-		float omega = PI / 10;
-		for (int i = 0; i < BODY_COUNT; ++i) {
-			bodies[i].theta += omega * cosf(omega * t) * dt * bodies[i].mass;
-		}
+	CloseWindow();
 
+	return 0;
+}
 
-		BeginDrawing();
+void render(Body bodies[], Vector2 origin) {
+	BeginDrawing();
 
-		ClearBackground(BLACK);
+	ClearBackground(BLACK);
 
+	{
 		// Draw arms
 		Vector2 prevPos = origin;
 		for (int i = 0; i < BODY_COUNT; ++i) {
@@ -63,16 +66,17 @@ int main(void) {
 			DrawCircleV(newPos, RADIUS, BLUE);
 			prevPos = newPos;
 		}
-
-		EndDrawing();
 	}
 
-	CloseWindow();
-
-	return 0;
+	EndDrawing();
 }
 
 void solve(Body bodies[], float dt) {
+	float omega = PI / 4;
+	for (int i = 0; i < BODY_COUNT; ++i) {
+		bodies[i].theta += omega * cosf(omega * GetTime()) * dt * bodies[i].mass;
+	}
+
 	return;
 }
 
