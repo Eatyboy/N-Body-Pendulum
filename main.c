@@ -28,10 +28,10 @@ int main(void) {
 	Vector2 origin = (Vector2){screenSize.x / 2, screenSize.y / 4};
 
 	Body bodies[BODY_COUNT];
-	bodies[0] = (Body){ 1.0f, 100, 0 };
-	bodies[1] = (Body){ 2.0f, 150, PI/4 };
-	bodies[2] = (Body){ 3.0f, 50, PI/2 };
-	bodies[3] = (Body){ 4.0f, 100, 3 * PI/4 };
+	bodies[0] = (Body){ 1.0f, 100, PI/5 };
+	bodies[1] = (Body){ 2.0f, 150, PI/5 };
+	bodies[2] = (Body){ 3.0f, 50, PI/5 };
+	bodies[3] = (Body){ 4.0f, 100, PI/5 };
 
 	while (!WindowShouldClose()) {
 		float dt = GetFrameTime();
