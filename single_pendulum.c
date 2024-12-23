@@ -83,7 +83,8 @@ int main(void) {
 		//Energy text;
 		DrawText(TextFormat("Initial energy: %f", initialEnergy), 20, 20, 24, WHITE);
 		DrawText(TextFormat("Current energy: %f", energy), 20, 60, 24, WHITE);
-		DrawText(TextFormat("Energy difference: %f", energy - initialEnergy), 20, 100, 24, WHITE);
+		float percentDiff = 100.0f * (energy - initialEnergy) / initialEnergy;
+		DrawText(TextFormat("Energy change: %f%%", percentDiff), 20, 100, 24, WHITE);
 
 		EndDrawing();
 	}
