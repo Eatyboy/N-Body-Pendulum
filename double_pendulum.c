@@ -73,7 +73,8 @@ int main(void) {
 	const int targetFPS = 60;
 
 	SetConfigFlags(FLAG_WINDOW_ALWAYS_RUN);
-	SetConfigFlags(FLAG_FULLSCREEN_MODE);
+	//SetConfigFlags(FLAG_FULLSCREEN_MODE);
+	SetConfigFlags(FLAG_VSYNC_HINT);
 	InitWindow(screenSize.x, screenSize.y, screenName);
 	SetTargetFPS(targetFPS);
 
