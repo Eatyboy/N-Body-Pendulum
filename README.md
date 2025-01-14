@@ -9,7 +9,7 @@ This is an interactive simulation of a double pendulum written in C using Raylib
 ![Double Pendulum Diagram](/Drawing.png) 
 ![Height Diagram](/Drawing2.png) 
 
-The position of each body is parameterized in terms of the angle from the vertical $\theta_n$. Each body also has a mass $m_n$ and a string length $l_n$. I've defined positive x to be rightward and positive y to be downward to match the rendering.
+The system is comprised of two point mass bodies connected by fixed-length strings. The position of each body is parameterized in terms of the angle from the vertical $\theta_n$. Each body also has a mass $m_n$ and a string length $l_n$. I've defined positive x to be rightward and positive y to be downward to match the rendering.
 
 Based on this, the positions of the two bodies are given by $(x_0, y_0)$ and $(x_1, y_1)$ respectively, where
 $$x_0 = l_0\sin\theta_0$$
@@ -19,31 +19,59 @@ $$y_1 = y_0 + l_1\cos\theta_1$$
 
 ### The Lagrangian
 
-To get the differential equations needed to simulate the systems, we need the Lagrangian.\
+To get the differential equations needed to simulate the systems, we need the Lagrangian.
+
 $$ℒ = T - U$$
 
-The kinetic energy\
-$$T = \frac{1}{2}m_0v_0^2 + \frac{1}{2}m_1v_1^2$$\
-where\
+The kinetic energy
+
+$$T = \frac{1}{2}m_0v_0^2 + \frac{1}{2}m_1v_1^2$$
+
+where
+
 $$v_0^2 = \dot{x_0}^2 + \dot{y_0}^2$$\
 $$v_1^2 = (\dot{x_0} + \dot{x_1})^2 + (\dot{y_0} + \dot{y_1})^2$$
 
 And the potential energy\
+
 $$U = m_0gh_0 + m1gh_1$$\
+
 where\
+
 $$h_0 = l_0 - y_0$$\
 $$h_1 = h_0 + l_1 - y_1$$
 
-The full Lagrangian, which is quite long, is\
+The full Lagrangian, which is quite long, is
+
 $$ℒ = \frac{1}{2}(m_0 + m_1)l_0^2\dot{\theta}_0^2 + \frac{1}{2}m_1l_1^2\dot{\theta}_1^2 + \frac{1}{2}m_1l_0l_1\dot{\theta}_0\dot{\theta}_1\cos(\theta_0 - \theta_1) + (m_0 + m_1)gl_0(1-\cos\theta_0) + m_1gl_1(1-\cos\theta_1)$$
 
 ### The differential equations
 
-The differential equations are given by the Euler-Lagrange equation\
-$$\frac{\partialℒ}{\partial\theta_n} - \frac{d}{dt}\frac{\partialℒ}{\partial\dot{\theta}_n} = 0$$\
-which will give a system two equations that are each linear in terms of their $\ddot{\theta}_n$ term. Thus, the system of equations can be solved to get\\
+The differential equations are given by the Euler-Lagrange equation
+
+$$\frac{\partialℒ}{\partial\theta_n} - \frac{d}{dt}\frac{\partialℒ}{\partial\dot{\theta}_n} = 0$$
+
+which will give a system two equations that are each linear in terms of their $\ddot{\theta}_n$ term. Thus, the system of equations can be solved to get
 
 $$\ddot{\theta}_0 = f_0(\theta_0, \dot{\theta}_0, \theta_1, \dot{\theta}_1)$$\
 $$\ddot{\theta}_1 = f_1(\theta_0, \dot{\theta}_0, \theta_1, \dot{\theta}_1)$$
 
-[N-Body Equations Paper](https://arxiv.org/abs/1910.12610) 
+This system can be reparameterized to get
+
+$$\omega_0 = \dot{\theta_0}$$\
+$$\ddot{\theta}_0 = f_0(\theta_0, \omega_0, \theta_1, \omega_1)$$\
+$$\omega_1 = \dot{\theta_1}$$\
+$$\ddot{\theta}_1 = f_1(\theta_0, \omega_0, \theta_1, \omega_1)$$
+
+These equations are now in a form suitable for numerical integration via Runge-Kutta 4 or any other numerical integration technique. I've chosen RK4 because it's relatively easy to implement and performs quite well.
+
+## Simulation
+
+![Simulation](/sim.png) 
+
+I've written the simulation in C using Raylib for getting input and rendering. You can start and stop the simulation by pressing the spacebar or clicking the Start/Stop button. You can also increase or decrease the speed using the left and right arrow keys. To change the initial configuration, you can use the sliders. Finally, I've included the initial and final energy as well as the percent change between the two. The energy values don't really correspond to real world values but are somewhat interesting nonetheless.
+
+
+## N-Body Simulation
+
+I initially wanted to simulate a system with N bodies, but that turned out to be a significantly more complex problem than I had anticipated. To support N bodies, I'd need to express everything as some sort of sum, and I'd also need to solve a variable system of linear equations. I found a [Paper](https://arxiv.org/abs/1910.12610) that would prove useful for the first part, but I'd either need to solve the linear system by hand or incorporate some sort of scientific computation library to solve it for me. 
