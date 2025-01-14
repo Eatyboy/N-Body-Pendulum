@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdio.h>
 #include "include/raylib.h"
 #include "include/raymath.h"
 
@@ -23,7 +22,6 @@ void solve(Body *body, float dt);
 Vector2 getPos(Body body);
 float func(float theta, float length); // f in dx/dt = f(x, t) in numerical integration
 float getEnergy(Body body);
-void drawCenteredText(const char *text, int parentX, int parentWidth, int posY, int fontSize, Color color);
 
 int main(void) {
 	const Vector2 screenSize = {1280, 720};
@@ -78,7 +76,7 @@ int main(void) {
 		const char *speedupText = (speedup >= 1 - EPSILON)
 			? TextFormat("Speed: %dX", (int)speedup)
 			: TextFormat("Speed: 1/%dX", (int)(1.0f / speedup));
-		drawCenteredText(speedupText, 0, GetScreenWidth(), 50, 36, WHITE);
+		DrawText(speedupText, 0.5f * (GetScreenWidth() - MeasureText(speedupText, 36)), 120, 36, WHITE);
 
 		//Energy text;
 		DrawText(TextFormat("Initial energy: %f", initialEnergy), 20, 20, 24, WHITE);
@@ -144,10 +142,4 @@ float getEnergy(Body body) {
 	float kinetic = 0.5f * body.mass * body.length * body.length * body.omega * body.omega;
 	float potential = body.mass * GRAVITY * body.length * (1 - cosf(body.theta));
 	return kinetic + potential;
-}
-
-void drawCenteredText(const char *text, int parentX, int parentWidth, int posY, int fontSize, Color color) {
-	float textWidth = MeasureText(text, 36);
-	int posX = parentX + 0.5f * (parentWidth - textWidth);
-	DrawText(text, posX, posY, fontSize, color);
 }
