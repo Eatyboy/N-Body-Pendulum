@@ -11,7 +11,11 @@ This is an interactive simulation of a double pendulum written in C using Raylib
 
 The position of each body is parameterized in terms of the angle from the vertical $\theta_n$. Each body also has a mass $m_n$ and a string length $l_n$. I've defined positive x to be rightward and positive y to be downward to match the rendering.
 
-The potential energy $U = m_0gh_0 + m_1gh_1$, where $h_n$ is the difference between the awefe
+The potential energy is the gravitational potential energy $mgh$, where $h$ is the difference between a body's y-position and the y-position where the potential is at the minimum.
 
-This is an equation $\int_{-\infty}^{\infty}e^{-x^2}dx = \sqrt{\pi}$
+### The Lagrangian
+
+$\mathcal{L}$
+
+
 [N-Body Equations Paper](https://arxiv.org/abs/1910.12610) 
