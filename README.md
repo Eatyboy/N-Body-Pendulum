@@ -32,7 +32,7 @@ And the potential energy\
 $$U = m_0gh_0 + m1gh_1$$\
 where\
 $$h_0 = l_0 - y_0$$\
-$$h_1 = h_0 + l_1 - y_1$$\
+$$h_1 = h_0 + l_1 - y_1$$
 
 The full Lagrangian, which is quite long, is\
 $$ℒ = \frac{1}{2}(m_0 + m_1)l_0^2\dot{\theta}_0^2 + \frac{1}{2}m_1l_1^2\dot{\theta}_1^2 + \frac{1}{2}m_1l_0l_1\dot{\theta}_0\dot{\theta}_1\cos(\theta_0 - \theta_1) + (m_0 + m_1)gl_0(1-\cos\theta_0) + m_1gl_1(1-\cos\theta_1)$$
@@ -41,8 +41,9 @@ $$ℒ = \frac{1}{2}(m_0 + m_1)l_0^2\dot{\theta}_0^2 + \frac{1}{2}m_1l_1^2\dot{\t
 
 The differential equations are given by the Euler-Lagrange equation\
 $$\frac{\partialℒ}{\partial\theta_n} - \frac{d}{dt}\frac{\partialℒ}{\partial\dot{\theta}_n} = 0$$\
-which will give a system two equations that are each linear in terms of their $\ddot{\theta}_n$ term. Thus, the system of equations can be solved to get\ 
+which will give a system two equations that are each linear in terms of their $\ddot{\theta}_n$ term. Thus, the system of equations can be solved to get\\
+
 $$\ddot{\theta}_0 = f_0(\theta_0, \dot{\theta}_0, \theta_1, \dot{\theta}_1)$$\
-$$\ddot{\theta}_1 = f_1(\theta_0, \dot{\theta}_0, \theta_1, \dot{\theta}_1)$$\
+$$\ddot{\theta}_1 = f_1(\theta_0, \dot{\theta}_0, \theta_1, \dot{\theta}_1)$$
 
 [N-Body Equations Paper](https://arxiv.org/abs/1910.12610) 
